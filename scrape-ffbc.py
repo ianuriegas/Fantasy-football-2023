@@ -41,6 +41,15 @@ defense = get_players("https://fantasyfootballcalculator.com/rankings/defense")
 # print(json.dumps(kicker, indent=4))
 # print(json.dumps(defense, indent=4))
 
+def find_team_name_by_mascot(mascot):
+    with open('data/defenses.json', 'r') as file:
+        data = json.load(file)
+        
+        for team in data:
+            if team['mascot'] == mascot:
+                return team['name']
+    return None
+
 # ==============================================
 # We can use this as a universal function later
 # ==============================================
@@ -66,18 +75,21 @@ for player_info in players_list:
             qb_player_href = matching_qb_player["href"]
             print(qb_player_href)
             player_info["href"] = qb_player_href
+            player_info["position"] = "qb"
 
     elif matching_rb_players:
         for matching_rb_player in matching_rb_players:
             rb_player_href = matching_rb_player["href"]
             print(rb_player_href)
             player_info["href"] = rb_player_href
+            player_info["position"] = "rb"
 
     elif matching_wr_players:
         for matching_wr_player in matching_wr_players:
             wr_player_href = matching_wr_player["href"]
             print(wr_player_href)
             player_info["href"] = wr_player_href
+            player_info["position"] = "wr"
 
     elif matching_te_players:
         for matching_te_player in matching_te_players:
@@ -98,7 +110,11 @@ for player_info in players_list:
         # something like this format { Saints: New Orleans Defense }
         # I have a json and will put it into "data" folder
         # we potentially want to change player_info["fullName"] with the "City + Defense"
-        print(player_name + " DEFENSE")
+        team_name = find_team_name_by_mascot(player_name)
+        defense_href = team_name.replace(" ", "-").replace(".", "").lower()
+        player_info["href"] = defense_href
+        player_info["position"] = "defense"
+        print(defense_href)
 
     else:
         # PROBLEM: some players are not in the list from ffbc.com
