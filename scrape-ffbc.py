@@ -96,6 +96,8 @@ for player_info in players_list:
     elif " D/ST" in player_name:
         # We want to map existing defenses to a json with their city name since we need that format EX(New Orleans Defense)
         # something like this format { Saints: New Orleans Defense }
+        # I have a json and will put it into "data" folder
+        # we potentially want to change player_info["fullName"] with the "City + Defense"
         print(player_name + " DEFENSE")
 
     else:
@@ -106,4 +108,4 @@ for player_info in players_list:
         print(player_name)
 
 formatted_player_list = json.dumps(players_list, indent=4)
-# print(formatted_player_list)
+print(formatted_player_list)
