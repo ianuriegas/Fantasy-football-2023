@@ -1,7 +1,7 @@
 import json
 import requests
 from bs4 import BeautifulSoup
-from get_team import get_players_list
+from get_my_team import get_players_list
 
 
 def get_players(url):
@@ -49,6 +49,33 @@ def find_team_name_by_mascot(mascot):
             if team['mascot'] == mascot:
                 return team['name']
     return None
+
+def find_default_position_id_by_name(full_name, json_file_path):
+    with open(json_file_path) as json_file:
+        data = json.load(json_file)
+
+    for person in data:
+        if person.get("fullName") == full_name:
+            default_position_id = person.get("defaultPositionId")
+            return default_position_id
+
+    return None
+
+def find_position(default_position_id):
+    positions = {
+        1: "qb",
+        2: "rb",
+        3: "wr",
+        4: "te",
+        5: "k",
+        6: "defense"
+        # Add more positions and IDs as needed
+    }
+    
+    if default_position_id in positions:
+        return positions[default_position_id]
+    else:
+        return "unknown"
 
 # ==============================================
 # We can use this as a universal function later
@@ -120,8 +147,13 @@ for player_info in players_list:
         # PROBLEM: some players are not in the list from ffbc.com
         # search for their name and position in some sort of other website
         # format their name to ex: (gabe-davis) | hoping this works (fingers crossed)
-
-        print(player_name)
+        json_file_path = 'data/all_players.json'
+        default_position_id = find_default_position_id_by_name(player_name, json_file_path)
+        position_id = find_position(default_position_id)
+        unknown_player_href = player_name.replace(" ", "-").replace(".", "").lower()
+        player_info["href"] = unknown_player_href
+        player_info["position"] = position_id
+        print(unknown_player_href)
 
 formatted_player_list = json.dumps(players_list, indent=4)
 print(formatted_player_list)

@@ -1,5 +1,8 @@
 import requests
 
+"""
+Gets players from my team and puts them into a list
+"""
 
 def get_players_list():
     url = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/2023/segments/0/leagues/1923771045?rosterForTeamId=6&view=mDraftDetail&view=mLiveScoring&view=mMatchupScore&view=mPendingTransactions&view=mPositionalRatings&view=mRoster&view=mSettings&view=mTeam&view=modular&view=mNav"
