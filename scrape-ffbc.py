@@ -48,13 +48,62 @@ players_list = get_players_list()
 for player_info in players_list:
     player_name = player_info["name"]
 
-    matching_wr_players = [wr_player for wr_player in wr if wr_player["name"] == player_name]
+    matching_qb_players = [
+        qb_player for qb_player in qb if qb_player["name"] == player_name]
+    matching_rb_players = [
+        rb_player for rb_player in rb if rb_player["name"] == player_name]
+    matching_wr_players = [
+        wr_player for wr_player in wr if wr_player["name"] == player_name]
+    matching_te_players = [
+        te_player for te_player in te if te_player["name"] == player_name]
+    matching_kicker_players = [
+        kicker_player for kicker_player in kicker if kicker_player["name"] == player_name]
+    matching_defense_players = [
+        defense_player for defense_player in defense if defense_player["name"] == player_name]
 
-    if matching_wr_players:
+    if matching_qb_players:
+        for matching_qb_player in matching_qb_players:
+            qb_player_href = matching_qb_player["href"]
+            print(qb_player_href)
+            player_info["href"] = qb_player_href
+
+    elif matching_rb_players:
+        for matching_rb_player in matching_rb_players:
+            rb_player_href = matching_rb_player["href"]
+            print(rb_player_href)
+            player_info["href"] = rb_player_href
+
+    elif matching_wr_players:
         for matching_wr_player in matching_wr_players:
             wr_player_href = matching_wr_player["href"]
+            print(wr_player_href)
             player_info["href"] = wr_player_href
 
+    elif matching_te_players:
+        for matching_te_player in matching_te_players:
+            te_player_href = matching_te_player["href"]
+            print(te_player_href)
+            player_info["href"] = te_player_href
+            player_info["position"] = "te"
+
+    elif matching_kicker_players:
+        for matching_kicker_player in matching_kicker_players:
+            kicker_player_href = matching_kicker_player["href"]
+            print(kicker_player_href)
+            player_info["href"] = kicker_player_href
+            player_info["position"] = "k"
+
+    elif " D/ST" in player_name:
+        # We want to map existing defenses to a json with their city name since we need that format EX(New Orleans Defense)
+        # something like this format { Saints: New Orleans Defense }
+        print(player_name + " DEFENSE")
+
+    else:
+        # PROBLEM: some players are not in the list from ffbc.com
+        # search for their name and position in some sort of other website
+        # format their name to ex: (gabe-davis) | hoping this works (fingers crossed)
+
+        print(player_name)
 
 formatted_player_list = json.dumps(players_list, indent=4)
-print(formatted_player_list)
+# print(formatted_player_list)
